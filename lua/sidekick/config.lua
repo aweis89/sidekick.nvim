@@ -88,6 +88,7 @@ local defaults = {
     mux = {
       backend = vim.env.ZELLIJ and "zellij" or "tmux", -- default to tmux unless zellij is detected
       enabled = false,
+      show_other_cwd = false, -- show sessions from other directories (requires enabled = true)
       -- terminal: new sessions will be created for each CLI tool and shown in a Neovim terminal
       -- window: when run inside a terminal multiplexer, new sessions will be created in a new tab
       -- split: when run inside a terminal multiplexer, new sessions will be created in a new split

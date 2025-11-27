@@ -134,13 +134,15 @@ function M.sessions()
   M.setup()
   local ret = {} ---@type sidekick.cli.Session[]
   local ids = {} ---@type table<string,boolean>
+  local current_cwd = M.cwd()
   for name, backend in pairs(M.backends) do
     for _, s in pairs(backend:sessions()) do
       s.backend = name
       s.started = true
       local session = M.new(s)
-      -- Filter out external sessions when mux is disabled
-      if not session.external or Config.cli.mux.enabled then
+      -- Filter sessions from other directories unless mux.show_other_cwd is enabled
+      local same_cwd = session.cwd == current_cwd
+      if same_cwd or (Config.cli.mux.enabled and Config.cli.mux.show_other_cwd) then
         ret[#ret + 1] = session
         assert(not ids[session.id], "duplicate session id: " .. session.id)
         ids[session.id] = true
